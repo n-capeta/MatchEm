@@ -8,15 +8,40 @@
 import UIKit
 
 class ViewController: UIViewController {
+    @IBOutlet weak var infoLabel: UILabel!
     
     var firstBtnTouch: UIButton?
     var rectBtnMap: [UIButton: Int] = [:]
     var btnInd = 0
     
+    var score = 0 {
+        didSet {
+            self.infoLabel.text = labelText(self.time, self.score, self.pairCount)
+        }
+    }
+    var time = 12.0 {
+        didSet {
+            self.infoLabel.text = labelText(self.time, self.score, self.pairCount)
+        }
+    }
+    
+    var pairCount = 0 {
+        didSet {
+            self.infoLabel.text = labelText(self.time, self.score, self.pairCount)
+        }
+    }
+    
+    var labelText = {(_ time: Double,_ score: Int,_ pairCount: Int)-> String in
+        return "time: \(Int(time)) - score: \(score) - total count: \(pairCount)"
+    }
+    
     override func viewDidLoad() {
-        super.viewDidLoad()
         print ("View Loaded")
-        // Do any additional setup after loading the view.
+        super.viewDidLoad()
+        
+        self.infoLabel.text = labelText(self.time, self.score, self.pairCount)
+        
+
     }
 
     @IBAction func startGame(_ sender: UIButton) {
@@ -26,7 +51,14 @@ class ViewController: UIViewController {
     
     func startGame(){
         print ("Game started")
-        makeRectPair()
+        Timer.scheduledTimer(withTimeInterval: 1.2, repeats: true){ timer in
+            if self.time > 0{
+                self.time -= 1
+                self.makeRectPair()
+            } else {
+                timer.invalidate()
+            }
+        }
         
     }
     
@@ -64,35 +96,42 @@ class ViewController: UIViewController {
         rectBtnMap[rectBtn]  = btnInd
         rectBtnMap[rect2Btn] = btnInd
         btnInd += 1
+        pairCount += 1
     }
     
     @objc func buttonSelect(_ sender: UIButton){
+        // Check to see if a button is currently stored
+        // Also check if the button is going to be pressed twice
         if firstBtnTouch == nil || firstBtnTouch == sender{
+            // Store the pressed button and highlihgt
+            print  ("Storing first button")
             firstBtnTouch = sender
             sender.setTitle("🕺", for: .normal)
             sender.layer.borderColor = UIColor.black.cgColor
             sender.layer.borderWidth = 5.0
+            
+        // If not it's the second button pressed
         } else {
+            // Gather the indexes for the two buttons that have been pressed
             let btn1PressInd = rectBtnMap[firstBtnTouch!]
             let btn2PressInd = rectBtnMap[sender]
+            // Check indexes against each other
             if (btn1PressInd == btn2PressInd){
+                // Correct pair - remove from view and clear firstBtnTouch
+                print ("Successful pair found")
                 firstBtnTouch!.removeFromSuperview()
                 sender.removeFromSuperview()
                 firstBtnTouch = nil // Clear selected
-                makeRectPair()
-                makeRectPair()
+                score += 1
+                
             } else {
+                // Incorrect pair - clear button selection
+                print ("Failed pair")
                 firstBtnTouch!.setTitle("", for: .normal)
                 firstBtnTouch!.layer.borderColor = UIColor.clear.cgColor
                 firstBtnTouch!.layer.borderWidth = 0
                 firstBtnTouch = nil // Clear selected
             }
         }
-        /*
-        sender.isSelected.toggle()
-        if sender.isSelected {
-        }
-         */
-        
     }
 }
