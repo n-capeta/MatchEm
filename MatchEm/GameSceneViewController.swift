@@ -10,6 +10,8 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet weak var infoLabel: UILabel!
     
+    
+    var startGameBtn : UIButton?
     var firstBtnTouch: UIButton?
     var rectBtnMap: [UIButton: Int] = [:]
     var btnInd = 0
@@ -32,7 +34,7 @@ class ViewController: UIViewController {
     }
     
     var labelText = {(_ time: Double,_ score: Int,_ pairCount: Int)-> String in
-        return "time: \(Int(time)) - score: \(score) - total count: \(pairCount)"
+        return "Time: \(Int(time)) - Score: \(score) - Pairs Created: \(pairCount)"
     }
     
     override func viewDidLoad() {
@@ -41,22 +43,28 @@ class ViewController: UIViewController {
         
         self.infoLabel.text = labelText(self.time, self.score, self.pairCount)
         
-
     }
 
     @IBAction func startGame(_ sender: UIButton) {
+        self.startGameBtn = sender
         sender.isHidden = true; // Hide button after clicked
-        startGame()
+        gameStart()
     }
     
-    func startGame(){
+    func gameStart(){
         print ("Game started")
+        // Resetting score, time and counts (here instead
+        // Putting here instead of gameEnd() so user can see their stats
+        score     = 0
+        pairCount = 0
+        time      = 12
         Timer.scheduledTimer(withTimeInterval: 1.2, repeats: true){ timer in
             if self.time > 0{
                 self.time -= 1
                 self.makeRectPair()
             } else {
                 timer.invalidate()
+                self.gameEnd()
             }
         }
         
@@ -133,5 +141,18 @@ class ViewController: UIViewController {
                 firstBtnTouch = nil // Clear selected
             }
         }
+    }
+    
+    func resetButtons(){
+        for (button, _) in rectBtnMap {
+            button.removeFromSuperview()
+        }
+        rectBtnMap.removeAll()
+        print ("Buttons removed")
+    }
+    
+    func gameEnd(){
+        resetButtons()
+        startGameBtn?.isHidden = false
     }
 }
