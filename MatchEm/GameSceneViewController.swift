@@ -154,5 +154,6 @@ class ViewController: UIViewController {
     func gameEnd(){
         resetButtons()
         startGameBtn?.isHidden = false
+        btnInd = 0
     }
 }
