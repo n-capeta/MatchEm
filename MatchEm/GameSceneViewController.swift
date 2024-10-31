@@ -10,7 +10,6 @@ import UIKit
 class ViewController: UIViewController {
     @IBOutlet weak var infoLabel: UILabel!
     
-    
     var startGameBtn : UIButton?
     var firstBtnTouch: UIButton?
     var rectBtnMap: [UIButton: Int] = [:]
@@ -53,12 +52,13 @@ class ViewController: UIViewController {
     
     func gameStart(){
         print ("Game started")
+        
         // Resetting score, time and counts (here instead
         // Putting here instead of gameEnd() so user can see their stats
         score     = 0
         pairCount = 0
         time      = 12
-        Timer.scheduledTimer(withTimeInterval: 1.2, repeats: true){ timer in
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true){ timer in
             if self.time > 0{
                 self.time -= 1
                 self.makeRectPair()
