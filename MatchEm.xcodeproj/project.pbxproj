@@ -17,7 +17,8 @@
 		500B9BF42CA5D90C007C0069 /* MatchEmUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B9BF32CA5D90C007C0069 /* MatchEmUITests.swift */; };
 		500B9BF62CA5D90C007C0069 /* MatchEmUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B9BF52CA5D90C007C0069 /* MatchEmUITestsLaunchTests.swift */; };
 		50DDF1D02CD3BFB300E0928B /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DDF1CF2CD3BFB200E0928B /* CustomTabBarController.swift */; };
-		50DDF1D22CD3C1FF00E0928B /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DDF1D12CD3C1FF00E0928B /* Config.swift */; };
+		50DDF1D22CD3C1FF00E0928B /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DDF1D12CD3C1FF00E0928B /* ConfigViewController.swift */; };
+		50DDF1D42CD6748500E0928B /* ConfigViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DDF1D32CD6747700E0928B /* ConfigViewControllerDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +53,8 @@
 		500B9BF32CA5D90C007C0069 /* MatchEmUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchEmUITests.swift; sourceTree = "<group>"; };
 		500B9BF52CA5D90C007C0069 /* MatchEmUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchEmUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		50DDF1CF2CD3BFB200E0928B /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
-		50DDF1D12CD3C1FF00E0928B /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		50DDF1D12CD3C1FF00E0928B /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
+		50DDF1D32CD6747700E0928B /* ConfigViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewControllerDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,10 +106,11 @@
 			isa = PBXGroup;
 			children = (
 				500B9BD22CA5D909007C0069 /* AppDelegate.swift */,
+				50DDF1D32CD6747700E0928B /* ConfigViewControllerDelegate.swift */,
 				500B9BD42CA5D909007C0069 /* SceneDelegate.swift */,
 				500B9BD62CA5D909007C0069 /* GameSceneViewController.swift */,
 				500B9BD82CA5D909007C0069 /* Main.storyboard */,
-				50DDF1D12CD3C1FF00E0928B /* Config.swift */,
+				50DDF1D12CD3C1FF00E0928B /* ConfigViewController.swift */,
 				50DDF1CF2CD3BFB200E0928B /* CustomTabBarController.swift */,
 				500B9BDB2CA5D90C007C0069 /* Assets.xcassets */,
 				500B9BDD2CA5D90C007C0069 /* LaunchScreen.storyboard */,
@@ -265,8 +268,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				500B9BD72CA5D909007C0069 /* GameSceneViewController.swift in Sources */,
+				50DDF1D42CD6748500E0928B /* ConfigViewControllerDelegate.swift in Sources */,
 				500B9BD32CA5D909007C0069 /* AppDelegate.swift in Sources */,
-				50DDF1D22CD3C1FF00E0928B /* Config.swift in Sources */,
+				50DDF1D22CD3C1FF00E0928B /* ConfigViewController.swift in Sources */,
 				50DDF1D02CD3BFB300E0928B /* CustomTabBarController.swift in Sources */,
 				500B9BD52CA5D909007C0069 /* SceneDelegate.swift in Sources */,
 			);

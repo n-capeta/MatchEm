@@ -15,5 +15,10 @@ class CustomTabBarController: UITabBarController
     override func viewDidLoad(){
         super.viewDidLoad()
         selectedIndex = initialIndex
+        
+        if let matchEmVC = viewControllers?[1] as? ViewController,
+           let configVC = viewControllers?[0] as? ConfigViewController {
+            configVC.delegate = matchEmVC
+        }
     }
 }

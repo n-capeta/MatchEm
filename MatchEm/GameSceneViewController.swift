@@ -7,13 +7,31 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, ConfigViewControllerDelegate {
     @IBOutlet weak var infoLabel: UILabel!
     
+    
+    var darkMode : Bool = false
     var startGameBtn : UIButton?
     var firstBtnTouch: UIButton?
     var rectBtnMap: [UIButton: Int] = [:]
+    var rectSpawnVal: Double = 1
     var btnInd = 0
+    
+    func updateValues(value: Double) {
+        // This makes slider value of 50 be default rect spawn
+        // Basically allows the slider values to fit the game
+        self.rectSpawnVal = (50 / value)
+    }
+    
+    func updateDark(value: Bool){
+        self.darkMode = value
+        if(self.darkMode){
+            view.backgroundColor = UIColor.lightGray
+        }else {
+            view.backgroundColor = UIColor.white
+        }
+    }
     
     var score = 0 {
         didSet {
@@ -52,15 +70,16 @@ class ViewController: UIViewController {
     
     func gameStart(){
         print ("Game started")
+        print (self.rectSpawnVal)
         
         // Resetting score, time and counts (here instead
         // Putting here instead of gameEnd() so user can see their stats
         score     = 0
         pairCount = 0
         time      = 12
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true){ timer in
+        Timer.scheduledTimer(withTimeInterval: rectSpawnVal, repeats: true){ timer in
             if self.time > 0{
-                self.time -= 1
+                self.time -= self.rectSpawnVal
                 self.makeRectPair()
             } else {
                 timer.invalidate()
