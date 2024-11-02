@@ -7,6 +7,11 @@
 import UIKit
 
 protocol ConfigViewControllerDelegate: AnyObject {
-    func updateValues(value: Double)
+    func updateRectSpawn(value: Double)
+    
     func updateDark(value: Bool)
+    
+    func updateTimer(value: Double)
+    
+    func updateMusic(value: Bool)
 }

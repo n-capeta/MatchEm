@@ -11,14 +11,23 @@ class ConfigViewController: UIViewController
 {
     weak var delegate: ConfigViewControllerDelegate?
     
+    @IBOutlet weak var GameTimeLabel: UILabel!
+    @IBOutlet weak var GameTimeStepper: UIStepper!
+    
     override func viewDidLoad()
     {
+        print("Config View Loaded")
         super.viewDidLoad()
+        GameTimeStepper.minimumValue = 1
+        GameTimeStepper.maximumValue = 60
+        GameTimeStepper.stepValue = 1
+        GameTimeStepper.value = 12
+        GameTimeLabel.text = "\(GameTimeStepper.value)"
 
     }
 
     @IBAction func sliderValueChanged(_ sender: UISlider) {
-        delegate?.updateValues(value: Double(sender.value))
+        delegate?.updateRectSpawn(value: Double(sender.value))
         print("Slider value: \(sender.value)")
     }
 
@@ -34,4 +43,19 @@ class ConfigViewController: UIViewController
         }
     }
     
+    @IBAction func muteSwitch(_ sender: UISwitch) {
+        if sender.isOn {
+            print("Unmute")
+            delegate?.updateMusic(value: sender.isOn)
+        } else {
+            print("Mute")
+            delegate?.updateMusic(value: sender.isOn)
+        }
+    }
+    @IBAction func stepperUsed(_ sender: UIStepper) {
+        GameTimeLabel.text = "\(sender.value)"
+        delegate?.updateTimer(value: sender.value)
+    }
 }
+
+

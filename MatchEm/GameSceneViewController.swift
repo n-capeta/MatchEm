@@ -6,19 +6,23 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController, ConfigViewControllerDelegate {
     @IBOutlet weak var infoLabel: UILabel!
-    
+    var musicPlayer: AVAudioPlayer?
     
     var darkMode : Bool = false
+    var timer: Double = 12.0
+    var rectSpawnVal: Double = 1
+    
     var startGameBtn : UIButton?
     var firstBtnTouch: UIButton?
+    
     var rectBtnMap: [UIButton: Int] = [:]
-    var rectSpawnVal: Double = 1
     var btnInd = 0
     
-    func updateValues(value: Double) {
+    func updateRectSpawn(value: Double) {
         // This makes slider value of 50 be default rect spawn
         // Basically allows the slider values to fit the game
         self.rectSpawnVal = (50 / value)
@@ -30,6 +34,30 @@ class ViewController: UIViewController, ConfigViewControllerDelegate {
             view.backgroundColor = UIColor.lightGray
         }else {
             view.backgroundColor = UIColor.white
+        }
+    }
+    
+    func updateTimer(value: Double){
+        self.timer = value
+    }
+    
+    func updateMusic(value: Bool){
+        if value {
+            musicPlayer?.pause()
+        } else {
+            musicPlayer?.play()
+        }
+    }
+    
+    func startBackgroundMusic(){
+        guard let url = Bundle.main.url(forResource: "background", withExtension: "mp3") else { return }
+              
+        do {
+            musicPlayer = try AVAudioPlayer(contentsOf: url)
+            musicPlayer?.numberOfLoops = -1
+            musicPlayer?.play()
+        } catch {
+            print("Error loading audio file: \(error)")
         }
     }
     
@@ -60,6 +88,8 @@ class ViewController: UIViewController, ConfigViewControllerDelegate {
         
         self.infoLabel.text = labelText(self.time, self.score, self.pairCount)
         
+        startBackgroundMusic()
+        
     }
 
     @IBAction func startGame(_ sender: UIButton) {
@@ -76,7 +106,7 @@ class ViewController: UIViewController, ConfigViewControllerDelegate {
         // Putting here instead of gameEnd() so user can see their stats
         score     = 0
         pairCount = 0
-        time      = 12
+        time      = timer
         Timer.scheduledTimer(withTimeInterval: rectSpawnVal, repeats: true){ timer in
             if self.time > 0{
                 self.time -= self.rectSpawnVal
