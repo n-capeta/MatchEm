@@ -22,19 +22,17 @@ class ViewController: UIViewController, ConfigViewControllerDelegate {
     var rectBtnMap: [UIButton: Int] = [:]
     var btnInd = 0
     
+    var isGamePaused = false
+    var gameTimer: Timer?
+    var hasGameStarted = false
+    
     func updateRectSpawn(value: Double) {
-        // This makes slider value of 50 be default rect spawn
-        // Basically allows the slider values to fit the game
         self.rectSpawnVal = (50 / value)
     }
     
     func updateDark(value: Bool){
         self.darkMode = value
-        if(self.darkMode){
-            view.backgroundColor = UIColor.lightGray
-        }else {
-            view.backgroundColor = UIColor.white
-        }
+        view.backgroundColor = self.darkMode ? UIColor.lightGray : UIColor.white
     }
     
     func updateTimer(value: Double){
@@ -51,7 +49,6 @@ class ViewController: UIViewController, ConfigViewControllerDelegate {
     
     func startBackgroundMusic(){
         guard let url = Bundle.main.url(forResource: "background", withExtension: "mp3") else { return }
-              
         do {
             musicPlayer = try AVAudioPlayer(contentsOf: url)
             musicPlayer?.numberOfLoops = -1
@@ -90,25 +87,47 @@ class ViewController: UIViewController, ConfigViewControllerDelegate {
         
         startBackgroundMusic()
         
-    }
-
-    @IBAction func startGame(_ sender: UIButton) {
-        self.startGameBtn = sender
-        sender.isHidden = true; // Hide button after clicked
-        gameStart()
+        let twoFingerTap = UITapGestureRecognizer(target: self, action: #selector(startGameWithTwoFingerTap))
+        twoFingerTap.numberOfTouchesRequired = 2
+        view.addGestureRecognizer(twoFingerTap)
     }
     
-    func gameStart(){
-        print ("Game started")
-        print (self.rectSpawnVal)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        pauseGame()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if !isGamePaused && hasGameStarted {
+            resumeGame()
+        }
+    }
+    
+    @objc func startGameWithTwoFingerTap() {
+        if !hasGameStarted {
+            gameStart()
+        } else if isGamePaused {
+            resumeGame()
+        } else {
+            pauseGame()
+        }
+    }
+    
+    func gameStart() {
+        print("Game started")
+        print(self.rectSpawnVal)
+        hasGameStarted = true
         
-        // Resetting score, time and counts (here instead
-        // Putting here instead of gameEnd() so user can see their stats
+        // Resetting score, time, and counts
         score     = 0
         pairCount = 0
         time      = timer
-        Timer.scheduledTimer(withTimeInterval: rectSpawnVal, repeats: true){ timer in
-            if self.time > 0{
+        isGamePaused = false
+        
+        // Schedule the game timer
+        gameTimer = Timer.scheduledTimer(withTimeInterval: rectSpawnVal, repeats: true) { timer in
+            if self.time > 0 {
                 self.time -= self.rectSpawnVal
                 self.makeRectPair()
             } else {
@@ -116,7 +135,30 @@ class ViewController: UIViewController, ConfigViewControllerDelegate {
                 self.gameEnd()
             }
         }
+    }
+
+    func pauseGame() {
+        print("Game paused")
+        // Set game to paused
+        isGamePaused = true
+        // Invalidate timer
+        gameTimer?.invalidate()
+    }
+
+    func resumeGame() {
+        print("Game resumed")
+        isGamePaused = false
         
+        // Restart the timer
+        gameTimer = Timer.scheduledTimer(withTimeInterval: rectSpawnVal, repeats: true) { timer in
+            if self.time > 0 {
+                self.time -= self.rectSpawnVal
+                self.makeRectPair()
+            } else {
+                timer.invalidate()
+                self.gameEnd()
+            }
+        }
     }
     
     
@@ -202,7 +244,13 @@ class ViewController: UIViewController, ConfigViewControllerDelegate {
     
     func gameEnd(){
         resetButtons()
-        startGameBtn?.isHidden = false
         btnInd = 0
+        print("Game Over")
+        gameTimer?.invalidate()
+        gameTimer = nil
+        hasGameStarted = false
+        
+        // Save the current score to GameManager and get top scores
+        GameManager.shared.addScore(score)
     }
 }

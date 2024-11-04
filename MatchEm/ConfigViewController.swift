@@ -14,6 +14,9 @@ class ConfigViewController: UIViewController
     @IBOutlet weak var GameTimeLabel: UILabel!
     @IBOutlet weak var GameTimeStepper: UIStepper!
     
+    @IBOutlet weak var gameHistory: UILabel!
+    
+    
     override func viewDidLoad()
     {
         print("Config View Loaded")
@@ -24,6 +27,12 @@ class ConfigViewController: UIViewController
         GameTimeStepper.value = 12
         GameTimeLabel.text = "\(GameTimeStepper.value)"
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool){
+        let topScores = GameManager.shared.getTopScores()
+        
+        gameHistory.text = "Top scores: \(topScores[0]), \(topScores[1]), \(topScores[2])"
     }
 
     @IBAction func sliderValueChanged(_ sender: UISlider) {
@@ -52,6 +61,7 @@ class ConfigViewController: UIViewController
             delegate?.updateMusic(value: sender.isOn)
         }
     }
+    
     @IBAction func stepperUsed(_ sender: UIStepper) {
         GameTimeLabel.text = "\(sender.value)"
         delegate?.updateTimer(value: sender.value)
